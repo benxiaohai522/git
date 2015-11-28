@@ -1,0 +1,82 @@
+1.主服务器配置
+
+#给服务器起一个唯一的id
+server-id=1   //给数据库服务的唯一标识，一般为大家设置服务器Ip的末尾号
+#开启二进制日志
+log-bin=master-bin
+#指定日志格式
+binlog-format=mixed/row/statement
+
+
+2. 授权
+GRANT REPLICATION SLAVE ON *.* TO 'repl'@'192.168.%.%' IDENTIFIED BY 'admin88';
+
+
+
+
+1.配置Slave从服务器（windows）
+[mysqld]
+server-id=2
+
+relay-log=mysql-relay
+
+
+连接Master
+
+change master to master_host='192.168.0.104', //Master 服务器Ip
+master_port=3306,
+master_user='repl',
+master_password='mysql', 
+master_log_file='master-bin.000001',//Master服务器产生的日志
+master_log_pos=0;
+
+启动Slave
+
+start slave;
+
+
+
+change master to master_host='192.168.28.9',
+master_port=3306,
+master_user='repl',
+master_password='admin88', 
+master_log_file='master-bin.000003',
+master_log_pos=335;
+
+
+
+1. 程序上自己逻辑来判断（正则）
+
+2. 来mysql官方提供的mysql-proxy（软件）
+
+
+作业：
+
+1. 在TP框架里面配置读写分离
+
+
+2. 使用mysql-proxy去配置
+
+
+===============================
+
+mongodb的安装
+1: 下载mongodb www.mongodb.org  下载最新的stable版
+2: 解压文件
+3: 不用编译,本身就是编译后的二进制可执行文件.
+
+
+./bin/mongod --dbpath /data/db --logpath /data/db/log --fork --port 27017
+
+参数解释:
+--dbpath 数据存储目录
+--logpath 日志存储目录
+--port 运行端口(默认27017)
+--fork 后台进程运行
+
+
+
+
+
+
+
